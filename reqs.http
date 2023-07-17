@@ -1,0 +1,13 @@
+@server = https://texai-verbose-yodel-g57qgww6v3q7j-8080.preview.app.github.dev
+@employees = {{server}}/api/employees
+###
+GET {{employees}}
+###
+POST {{employees}}
+Content-Type: application/json
+
+{
+  "firstName" : "Bilbo",
+  "lastName" : "Baggins",
+  "description" : "burglar"
+}
