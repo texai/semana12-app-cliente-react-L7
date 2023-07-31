@@ -25,7 +25,7 @@ class InstrumentoList extends React.Component{
 			<Instrumento key={instrumento._links.self.href} instrumento={instrumento}/>
 		);
 		return (
-			<table>
+			<table border="1">
 				<tbody>
 					<tr>
 						<th>Nombre</th>
