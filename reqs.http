@@ -1,4 +1,4 @@
-@server = https://texai-verbose-yodel-g57qgww6v3q7j-8080.preview.app.github.dev
+@server = https://texai-musical-goldfish-q9pqwgxpjf4wvw-8080.preview.app.github.dev
 @employees = {{server}}/api/employees
 ###
 GET {{employees}}
