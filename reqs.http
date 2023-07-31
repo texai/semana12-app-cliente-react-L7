@@ -1,13 +1,13 @@
-@server = https://texai-musical-goldfish-q9pqwgxpjf4wvw-8080.preview.app.github.dev
-@employees = {{server}}/api/employees
+@server = https://texai-redesigned-sniffle-q9pqwgjg939rq5-8080.preview.app.github.dev
+@instrumentos = {{server}}/api/instrumentos
 ###
-GET {{employees}}
+GET {{instrumentos}}
 ###
-POST {{employees}}
+POST {{instrumentos}}
 Content-Type: application/json
 
 {
-  "firstName" : "Bilbo",
-  "lastName" : "Baggins",
-  "description" : "burglar"
+  "nombre" : "Quena",
+  "categoria" : "Instrumento de viento",
+  "descripcion" : "tubo con orificios que al taparlos hacen sonar diferentes notas"
 }
