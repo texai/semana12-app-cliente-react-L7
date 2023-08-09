@@ -40809,7 +40809,7 @@ var router = createBrowserRouter([{
   path: '/nuevo-musico',
   element: /*#__PURE__*/React.createElement(PageNuevoMusico, null)
 }, {
-  path: '/editar-musico',
+  path: '/editar-musico/:id',
   element: /*#__PURE__*/React.createElement(PageEditarMusico, null)
 }]);
 ReactDOM.render( /*#__PURE__*/React.createElement(React.StrictMode, null, /*#__PURE__*/React.createElement(RouterProvider, {
@@ -40854,6 +40854,12 @@ module.exports = rest.wrap(mime, {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -40862,33 +40868,41 @@ function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefine
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var _require = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js"),
-  Link = _require.Link;
+  Link = _require.Link,
+  useParams = _require.useParams;
 var client = __webpack_require__(/*! ../client */ "./src/main/js/client.js");
 var _require2 = __webpack_require__(/*! react */ "./node_modules/react/index.js"),
-  useState = _require2.useState;
+  useState = _require2.useState,
+  useEffect = _require2.useEffect;
 function PageEditarMusico() {
-  var _useState = useState(""),
+  var _useState = useState({}),
     _useState2 = _slicedToArray(_useState, 2),
-    nombre = _useState2[0],
-    setNombre = _useState2[1];
+    musico = _useState2[0],
+    setMusico = _useState2[1];
 
   // getting id param from route
-  var id = props.match.params.id;
-  client({
-    method: 'GET',
-    path: '/api/musicos/' + id
-  }).done(function (response) {
-    setNombre(response.nombre);
-    alert(nombre);
-  });
+  var _useParams = useParams(),
+    id = _useParams.id;
+  useEffect(function () {
+    client({
+      method: 'GET',
+      path: '/api/musicos/' + id
+    }).done(function (response) {
+      setMusico(response.entity);
+    });
+  }, []);
   var handleSubmit = function handleSubmit(event) {
-    // event.preventDefault();
-    // client({
-    //     method: 'POST',
-    //     path: '/api/musicos',
-    //     entity: { nombre: nombre },
-    //     headers: { 'Content-Type': 'application/json' }
-    // }).done( () => window.location = "/");
+    event.preventDefault();
+    client({
+      method: 'PATCH',
+      path: '/api/musicos/' + id,
+      entity: musico,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).done(function () {
+      return window.location = "/";
+    });
   };
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h1", null, "Editar M\xFAsico"), /*#__PURE__*/React.createElement("form", {
     onSubmit: handleSubmit
@@ -40898,13 +40912,15 @@ function PageEditarMusico() {
     type: "text",
     id: "nombre",
     name: "nombre",
-    value: nombre,
+    value: musico.nombre,
     onChange: function onChange(e) {
-      return setNombre(e.target.value);
+      return setMusico(_objectSpread(_objectSpread({}, musico), {}, {
+        nombre: e.target.value
+      }));
     }
   }), /*#__PURE__*/React.createElement("input", {
     type: "submit",
-    value: "Nuevo M\xFAsico"
+    value: "Editar M\xFAsico"
   })), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(Link, {
     to: "/"
   }, "Volver"));

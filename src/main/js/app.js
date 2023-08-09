@@ -10,7 +10,7 @@ const PageEditarMusico = require('./pages/editar-musico');
 const router = createBrowserRouter([
 	{ path: '/', element: <PageHome /> },
 	{ path: '/nuevo-musico', element: <PageNuevoMusico /> },
-	{ path: '/editar-musico', element: <PageEditarMusico /> },
+	{ path: '/editar-musico/:id', element: <PageEditarMusico /> },
 ]);
 
 

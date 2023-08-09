@@ -1,31 +1,30 @@
 const React = require('react');
-const { Link } = require('react-router-dom');
+const { Link, useParams } = require('react-router-dom');
 
 const client = require('../client');
-const {useState} = require('react');
+const { useState, useEffect } = require('react');
 
 function PageEditarMusico() {
 
-    const [nombre, setNombre] = useState("");
+    const [musico, setMusico] = useState({});
 
     // getting id param from route
-    const id = props.match.params.id;
-    
+    let { id } = useParams();
 
-    client({ method: 'GET', path: '/api/musicos/'+id }).done(response => {
-        setNombre(response.nombre);
-        alert(nombre);
-    });
-
+    useEffect(() => {
+        client({ method: 'GET', path: '/api/musicos/' + id }).done(response => {
+            setMusico(response.entity);
+        });
+    }, [])
 
     const handleSubmit = (event) => {
-        // event.preventDefault();
-        // client({
-        //     method: 'POST',
-        //     path: '/api/musicos',
-        //     entity: { nombre: nombre },
-        //     headers: { 'Content-Type': 'application/json' }
-        // }).done( () => window.location = "/");
+        event.preventDefault();
+        client({
+            method: 'PATCH',
+            path: '/api/musicos/' + id,
+            entity: musico,
+            headers: { 'Content-Type': 'application/json' }
+        }).done(() => window.location = "/");
     };
 
     return (
@@ -33,8 +32,8 @@ function PageEditarMusico() {
             <h1>Editar Músico</h1>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="nombre">Nombre</label>
-                <input type="text" id="nombre" name="nombre" value={nombre} onChange={(e)=>setNombre(e.target.value)} />
-                <input type="submit" value="Nuevo Músico" />
+                <input type="text" id="nombre" name="nombre" value={musico.nombre} onChange={(e) => setMusico({...musico, nombre: e.target.value })} />
+                <input type="submit" value="Editar Músico" />
             </form>
             <hr />
             <Link to="/">Volver</Link>
